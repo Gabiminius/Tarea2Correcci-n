@@ -1,4 +1,4 @@
-
+package Logica;
 import java.time.Instant;
 /**
  * La clase Asistencia representa el registro de asistencia de un empleado.

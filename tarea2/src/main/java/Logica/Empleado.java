@@ -1,4 +1,4 @@
-
+package Logica;
 
 public class Empleado implements Invitable{
     private String id;

@@ -1,6 +1,7 @@
+package Logica;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+
 /**
  * La clase InformeDeReunion se encarga de generar un informe detallado de una reunión,
  * incluyendo su duración, tipo, participantes y notas. El informe se guarda en un archivo.txt

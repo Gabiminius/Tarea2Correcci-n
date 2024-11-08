@@ -1,3 +1,4 @@
+package Logica;
 /**
  * La clase Nota representa una nota que contiene un contenido específico.
  */

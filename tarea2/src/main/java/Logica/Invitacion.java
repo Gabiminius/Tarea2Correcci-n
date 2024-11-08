@@ -1,3 +1,4 @@
+package Logica;
 import java.time.Instant;
 /**
  * La clase Invitacion representa una invitación a una reunión, incluyendo

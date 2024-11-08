@@ -1,4 +1,4 @@
-
+package Logica;
 /**
  * La interfaz Invitable define el comportamiento de objetos que pueden ser invitados a una reunión.
  * Cualquier clase que implemente esta interfaz debe proporcionar una implementación del método invitar.
