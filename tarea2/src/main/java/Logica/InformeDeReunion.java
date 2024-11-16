@@ -17,7 +17,7 @@ public class InformeDeReunion {
      * @param archivo El archivo donde se guardará el informe generado.
      */
 
-    public InformeDeReunion(Reunion reunion,String archivo) {
+    public InformeDeReunion(Reunion reunion, String archivo) {
         this.reunion = reunion;
         this.archivo=archivo;
     }
