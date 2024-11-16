@@ -1,4 +1,6 @@
 package Logica;
+import Exceptions.*;
+
 import java.time.Instant;
 import java.util.Date;
 import java.time.Duration;
@@ -17,7 +19,7 @@ public class ReunionPresencial extends Reunion {
      * @param tipoReunion      El tipo de la reunión.
      * @param sala             La sala donde se llevará a cabo la reunión.
      */
-    public ReunionPresencial(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, TipoReunion tipoReunion,String sala){
+    public ReunionPresencial(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, TipoReunion tipoReunion,String sala) throws MensajeNullException, IniciarReunionIniciadaException, EmpleadoNoInvitadoException, EmpleadoNullException, DuracionNullException, FinalizarReunionNoIniciadaException, OverflowEnumException, ReunionYaFinalizoException {
         super(fecha, horaPrevista, duracionPrevista, organizador, tipoReunion);
         this.sala = sala;
     }

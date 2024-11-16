@@ -1,4 +1,6 @@
 package Logica;
+import Exceptions.DuracionNullException;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -64,6 +66,8 @@ public class InformeDeReunion {
 
         } catch (IOException e) {
             System.out.println("Error al generar el archivo de informe: " + e.getMessage());
+        } catch (DuracionNullException e) {
+            throw new RuntimeException(e);
         }
     }
 }

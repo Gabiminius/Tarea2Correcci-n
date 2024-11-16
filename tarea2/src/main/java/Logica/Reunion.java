@@ -1,5 +1,8 @@
 package Logica;
+import Exceptions.*;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.time.Instant;
 import java.time.Duration;
@@ -9,14 +12,17 @@ public abstract class Reunion {
     private Date fecha;
     private Instant horaPrevista;
     private Duration duracionPrevista;
-    private Instant horaInicio;
-    private Instant horaFin;
+    private Instant horaInicio=null;
+    private Instant horaFin=null;
     private List<Asistencia> asistencias;
     private List<Invitacion> invitaciones;
+    private List<Empleado> listaInvitados;
     private List<Nota> notas;
     private Empleado organizador;
     private TipoReunion tipoReunion;
     private List<Invitable> participantes;
+    private List<TipoReunion> tipos;
+    private List<Retraso> retrasos;
     /**
      * Constructor para crear una reunión.
      * @param fecha Fecha de la reunión.
@@ -27,12 +33,19 @@ public abstract class Reunion {
      */
 
 
-    public Reunion(Date fecha,Instant horaPrevista,Duration duracionPrevista,Empleado organizador, TipoReunion tipoReunion){
+    public Reunion(Date fecha,Instant horaPrevista,Duration duracionPrevista,Empleado organizador, TipoReunion tipoReunion) throws EmpleadoNullException, MensajeNullException, DuracionNullException, IniciarReunionIniciadaException, FinalizarReunionNoIniciadaException, OverflowEnumException, EmpleadoNoInvitadoException, ReunionYaFinalizoException {
+        if((tipoReunion != TipoReunion.OTRO) || (tipoReunion != TipoReunion.MARKETING) || (tipoReunion != TipoReunion.TECNICA)){
+            throw new OverflowEnumException("El tipo de reunión no es válido.");
+        }else{
+            this.tipoReunion=tipoReunion;
+            tipos = Arrays.asList(TipoReunion.values());
+
+        }
         this.fecha = fecha;
         this.horaPrevista = horaPrevista;
         this.duracionPrevista = duracionPrevista;
         this.organizador = organizador;
-        this.tipoReunion = tipoReunion;
+
         this.asistencias = new ArrayList<>();
         this.invitaciones = new ArrayList<>();
         this.notas = new ArrayList<>();
@@ -110,38 +123,55 @@ public abstract class Reunion {
      *
      * @return Duración real de la reunión.
      */
-    public Duration calcularTiempoReal() {
-        if (horaInicio != null && horaFin != null) {
-            return Duration.between(horaInicio, horaFin);
+    public Duration calcularTiempoReal() throws DuracionNullException {
+        if(horaInicio == null || horaFin == null){
+            throw new DuracionNullException("La reunión debe iniciar y finalizar primero. ");
+        }else {
+            duracionPrevista = Duration.between(horaInicio, horaFin);
+            return duracionPrevista;
         }
-        return Duration.ZERO;
     }
     /**
      * Inicia la reunión registrando la hora de inicio.
      */
-    public void iniciar(){
-        this.horaInicio = Instant.now();
-
+    public void iniciar() throws IniciarReunionIniciadaException {
+        if(this.horaInicio != null){
+            throw new IniciarReunionIniciadaException("La reunión ya ha sido iniciada.");
+        }else{
+            this.horaInicio = Instant.now();
+        }
     }
     /**
      * Finaliza la reunión registrando la hora de fin.
      */
-    public void finalizar(){
-        this.horaFin = Instant.now();
-
+    public void finalizar() throws FinalizarReunionNoIniciadaException {
+        if(horaInicio == null) {
+            throw new FinalizarReunionNoIniciadaException("La reunión no ha sido iniciada.");
+        }
+        else{
+            horaFin = Instant.now();
+        }
     }
     /**
      * Agrega un participante a la reunión y envía una invitación.
      *
      * @param participante El participante a agregar.
      */
-    public void agregarParticipante(Invitable participante) {
-        if (!participantes.contains(participante)) { //Si el participante no esta en participantes
-            participantes.add(participante); //Se añade a participantes
-
-            Invitacion invitacion = new Invitacion(participante, this, Instant.now()); //Se crea una instancia de invitacion para la reunion creada y el participante invitado
-            invitaciones.add(invitacion); //Se agrega esa instancia de invitacion a las invitaciones
-            invitacion.invitar(); //Se llama el metodo enviar de invitacion
+    public void agregarParticipante(Empleado participante) throws ReunionYaFinalizoException, EmpleadoNoInvitadoException {
+        if(!listaInvitados.contains(participante)){
+            throw new EmpleadoNoInvitadoException("El empleado no ha sido invitado a la reunión.");
+        } else if (horaFin != null) {
+            throw new ReunionYaFinalizoException("La reunión ya finalizó.");
+        } else {
+            Asistencia asistio;
+            if (horaInicio == null) {
+                asistio = new Asistencia(participante,true,horaInicio);
+                asistencias.add(asistio);
+            } else {
+                asistio = new Retraso(participante,horaPrevista, horaInicio);
+                asistencias.add(asistio);
+                retrasos.add((Retraso) asistio);
+            }
         }
     }
     /**
@@ -149,9 +179,13 @@ public abstract class Reunion {
      *
      * @param contenido Contenido de la nota.
      */
-    public void agregarNota(String contenido) {
-        Nota nota = new Nota(contenido);
-        this.notas.add(nota);
+    public void agregarNota(String contenido) throws MensajeNullException {
+        if (contenido == null) {
+            throw new MensajeNullException("El mensaje no puede ser nulo");
+        } else {
+            Nota nota = new Nota(contenido);
+            this.notas.add(nota);
+        }
     }
     /**
      * Lista las notas de la reunión .

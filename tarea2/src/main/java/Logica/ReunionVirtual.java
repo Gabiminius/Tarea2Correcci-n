@@ -1,4 +1,6 @@
 package Logica;
+import Exceptions.*;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
@@ -15,7 +17,7 @@ public class ReunionVirtual extends Reunion {
      * @param tipoReunion      El tipo de la reunión.
      * @param enlace            El enlace para acceder a la reunión virtual.
      */
-    public ReunionVirtual(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, TipoReunion tipoReunion, String enlace){
+    public ReunionVirtual(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, TipoReunion tipoReunion, String enlace) throws MensajeNullException, IniciarReunionIniciadaException, EmpleadoNoInvitadoException, EmpleadoNullException, DuracionNullException, FinalizarReunionNoIniciadaException, OverflowEnumException, ReunionYaFinalizoException {
         super(fecha, horaPrevista, duracionPrevista, organizador, tipoReunion);
         this.enlace=enlace;
     }

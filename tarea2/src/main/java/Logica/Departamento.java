@@ -1,4 +1,7 @@
 package Logica;
+import Exceptions.EmpleadoNoInvitadoException;
+import Exceptions.ReunionYaFinalizoException;
+
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -76,7 +79,7 @@ public class Departamento implements Invitable{
      * @param reunion La reunión a la que se invita a los empleados del departamento.
      */
     @Override
-    public void invitar(Reunion reunion) {
+    public void invitar(Reunion reunion) throws EmpleadoNoInvitadoException, ReunionYaFinalizoException {
         System.out.println("Enviando invitación al departamento " + nombredepa);
         for (Empleado empleado : empleados) {
             reunion.agregarParticipante(empleado);

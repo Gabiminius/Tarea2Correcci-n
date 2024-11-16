@@ -1,4 +1,7 @@
 package Logica;
+import Exceptions.EmpleadoNoInvitadoException;
+import Exceptions.ReunionYaFinalizoException;
+
 import java.time.Instant;
 /**
  * La clase Invitacion representa una invitación a una reunión, incluyendo
@@ -24,7 +27,7 @@ public class Invitacion{
     /**
      * Envía la invitación al destinatario para la reunión especificada.
      */
-    public void invitar(){
+    public void invitar() throws EmpleadoNoInvitadoException, ReunionYaFinalizoException {
         destinatario.invitar(reunion);
 
     }
